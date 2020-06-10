@@ -3,11 +3,9 @@ __author__ = 'akashjeez'
 import os, sys, json, requests
 from flask import Flask, request, jsonify
 from datetime import datetime, timedelta
-from fake_useragent import UserAgent
 
 
 app = Flask(__name__)
-headers = {'User-Agent': UserAgent().random}
 
 
 @app.route('/')
@@ -27,9 +25,9 @@ def bitcoin_price():
 		category = request.args.get('category', default = 'market-price', type = str)
 		timespan = request.args.get('timespan', default = '30days', type = str)
 		if category.casefold() == 'market-price':
-			response = requests.get(f"{BASE_URL}/market-price?timespan={timespan}&format=json", headers = headers).json()
+			response = requests.get(f"{BASE_URL}/market-price?timespan={timespan}&format=json").json()
 		elif category.casefold() == 'blocks-size':
-			response = requests.get(f"{BASE_URL}/blocks-size?timespan={timespan}&format=json", headers = headers).json()
+			response = requests.get(f"{BASE_URL}/blocks-size?timespan={timespan}&format=json").json()
 		return jsonify(results = {
 			'name': response.get('name', 'TBD'), 
 			'unit': response.get('unit', 'TBD'), 
@@ -41,15 +39,15 @@ def bitcoin_price():
 		return f"""Error: {ex} <br/> Something Went Wrong! Please Visit <a href='https://www.blockchain.com/api/' 
 			target='_blank'> Bitcoin API Site! </a>"""
 
-	
+
 @app.route('/bitcoin/exchange', methods = ['GET', 'POST'])
 def bitcoin_exchange():
 	try:
 		dataset, BASE_URL = [], 'https://api.blockchain.info'
 		code = request.args.get('code', default = 'USD', type = str)
 		value = request.args.get('value', default = 500, type = int)
-		response_1 = requests.get(f"{BASE_URL}/ticker", headers = headers).json()
-		response_2 = requests.get(f"{BASE_URL}/tobtc?currency={code.upper()}&value={str(value)}", headers = headers).json()
+		response_1 = requests.get(f"{BASE_URL}/ticker").json()
+		response_2 = requests.get(f"{BASE_URL}/tobtc?currency={code.upper()}&value={str(value)}").json()
 		return jsonify(results = { 
 			'count': len(response_1), 'data': response_1 , 
 			'from_currency': code.upper(),'to_currency': 'BTC', 
@@ -61,4 +59,4 @@ def bitcoin_exchange():
 
 
 if __name__ == '__main__':
-	app.run(host = '0.0.0.0', port = 4321, debug = True)
+	app.run(port = 4321, debug = True)
