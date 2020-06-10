@@ -10,15 +10,15 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-	return "Index Page!"
+	return "AkashJeez! Index Page!"
 
 
 @app.route('/about')
 def about():
-	return "About Page!"
+	return "AkashJeez! About Page!"
 
 
-@app.route('/bitcoin/price', methods = ['GET', 'POST'])
+@app.route('/bitcoin/price')
 def bitcoin_price():
 	try:
 		dataset, BASE_URL = [], 'https://api.blockchain.info/charts'
@@ -40,7 +40,7 @@ def bitcoin_price():
 			target='_blank'> Bitcoin API Site! </a>"""
 
 
-@app.route('/bitcoin/exchange', methods = ['GET', 'POST'])
+@app.route('/bitcoin/exchange')
 def bitcoin_exchange():
 	try:
 		dataset, BASE_URL = [], 'https://api.blockchain.info'
@@ -59,4 +59,4 @@ def bitcoin_exchange():
 
 
 if __name__ == '__main__':
-	app.run(port = 4321, debug = True)
+	app.run(host = '0.0.0.0', port = 4321, debug = True)
