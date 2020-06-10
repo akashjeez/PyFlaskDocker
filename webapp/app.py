@@ -9,7 +9,7 @@ app = Flask(__name__)
 def index():
 	return "Index Page!"
 
-@app.route('about')
+@app.route('/about')
 def about():
 	return "About Page!"
 
