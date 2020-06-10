@@ -5,29 +5,20 @@ from flask import Flask, request, jsonify
 from datetime import datetime, timedelta
 from fake_useragent import UserAgent
 
+
 app = Flask(__name__)
 headers = {'User-Agent': UserAgent().random}
+
 
 @app.route('/')
 def index():
 	return "Index Page!"
 
+
 @app.route('/about')
 def about():
 	return "About Page!"
 
-
-def GetBitcoinData(category, timeline):
-	try:
-		dataset, BASE_URL = [], 'https://api.blockchain.info/charts/{}?timespan={}&format=json'
-		if category == 'market-price':
-			response = requests.get(BASE_URL.format('market-price', timeline), headers = headers).json()
-		elif category == 'blocks-size':
-			response = requests.get(BASE_URL.format('blocks-size', timeline), headers = headers).json()
-		else:
-			response = {'error': "Invalid Category!"}
-	except Exception as ex:
-		return f"Error: {ex}"
 
 @app.route('/bitcoin/price', methods = ['GET', 'POST'])
 def bitcoin_price():
@@ -50,6 +41,7 @@ def bitcoin_price():
 		return f"""Error: {ex} <br/> Something Went Wrong! Please Visit <a href='https://www.blockchain.com/api/' 
 			target='_blank'> Bitcoin API Site! </a>"""
 
+	
 @app.route('/bitcoin/exchange', methods = ['GET', 'POST'])
 def bitcoin_exchange():
 	try:
